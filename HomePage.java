@@ -11,36 +11,37 @@ import java.time.Duration;
 public class HomePage {
     private WebDriver driver;
 
+
     // Locators
     private By acceptCookies = By.id("wt-cli-accept-all-btn");
     private By navbar = By.id("navbarNavDropdown");
-    private By companyMenu = By.xpath("//a[contains(text(),'Company')]");
-    private By companySubMenu = By.cssSelector(".new-menu-dropdown-layout-6-mid-container");
-    private By careersLink = By.cssSelector("#navbarNavDropdown > ul:nth-child(1) > li.nav-item.dropdown.show > div > div.new-menu-dropdown-layout-6-mid-container > a:nth-child(2)");
+    private By companyBtn = By.xpath("//a[contains(text(),'Company')]");
+    private By careersOption = By.cssSelector("#navbarNavDropdown > ul:nth-child(1) > li.nav-item.dropdown.show > div > div.new-menu-dropdown-layout-6-mid-container > a:nth-child(2)");
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void clickAcceptCookies() {
+    public void clickAcceptCookiesBtn() {
         driver.findElement(acceptCookies).click();
     }
 
-    public void checkNavBarExist() {
-        if (driver.findElement(navbar).isDisplayed()) {
-            System.out.println("NavBar Exist.");
-        } else {
-            System.out.println("NavBar Not Found.");
+    public boolean checkNavBarExist() {
+        try {
+            WebElement navbarElement = new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(ExpectedConditions.visibilityOfElementLocated(navbar));
+            return navbarElement.isDisplayed();
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    public void clickCompanyMenu() {
+    public void navigateCareersPage() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement companyMenuElement = wait.until(ExpectedConditions.elementToBeClickable(companyMenu));
-        companyMenuElement.click();
-        WebElement submenu = wait.until(ExpectedConditions.visibilityOfElementLocated(companySubMenu));
-        WebElement careers = wait.until(ExpectedConditions.elementToBeClickable(careersLink));
+        WebElement clickCompanyMenuElement = wait.until(ExpectedConditions.elementToBeClickable(companyBtn));
+        clickCompanyMenuElement.click();
+        WebElement careers = wait.until(ExpectedConditions.elementToBeClickable(careersOption));
         careers.click();
-
     }
+
 }

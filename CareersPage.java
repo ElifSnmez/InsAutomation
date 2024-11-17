@@ -1,10 +1,12 @@
 package org.example.Pages;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 
 public class CareersPage {
@@ -12,7 +14,7 @@ public class CareersPage {
     private WebDriverWait wait;
     private Actions actions;
 
-   //Locators
+    //Locators
     private By seeAllTeamsBtn = By.xpath("//*[@id='career-find-our-calling']/div/div/a");
     private By locationsBlock = By.cssSelector("#career-our-location > div > div > div");
     private By lifeAtInsiderBlock = By.cssSelector("body > div.elementor.elementor-22610 > section.elementor-section.elementor-top-section.elementor-element.elementor-element-a8e7b90.elementor-section-full_width.elementor-section-height-default.elementor-section-height-default > div > div > div");
@@ -25,29 +27,29 @@ public class CareersPage {
         this.actions = new Actions(driver);
     }
 
-    public void scrollToSeeAllTeamsButtonAndClick () {
+    public void clickSeeAllTeamsButtonAndClick() {
         WebElement seeAllTeams = wait.until(ExpectedConditions.visibilityOfElementLocated(seeAllTeamsBtn));
         actions.moveToElement(seeAllTeams).perform();
         seeAllTeams.click();
     }
 
-    public void scrollAndCheckLocationsBlock() {
-        WebElement locations = wait.until(ExpectedConditions.visibilityOfElementLocated(locationsBlock));
-        actions.moveToElement(locations).perform();
-        if (locations.isDisplayed()) {
-            System.out.println("Locations block found");
-        } else {
-            System.out.println("Locations block not found.");
+    public boolean scrollAndCheckLocationsBlock() {
+        try {
+            WebElement locations = wait.until(ExpectedConditions.visibilityOfElementLocated(locationsBlock));
+            actions.moveToElement(locations).perform();
+            return locations.isDisplayed();
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    public void scrollAndCheckLifeAtInsiderBlock() {
-        WebElement lifeAtInsider = wait.until(ExpectedConditions.visibilityOfElementLocated(lifeAtInsiderBlock));
-        actions.moveToElement(lifeAtInsider).perform();
-        if (lifeAtInsider.isDisplayed()) {
-            System.out.println("Life at Insider block found.");
-        } else {
-            System.out.println("Life at Insider block not found.");
+    public boolean scrollAndCheckLifeAtInsiderBlock() {
+        try {
+            WebElement lifeAtInsider = wait.until(ExpectedConditions.visibilityOfElementLocated(lifeAtInsiderBlock));
+            actions.moveToElement(lifeAtInsider).perform();
+            return lifeAtInsider.isDisplayed();
+        } catch (Exception e) {
+            return false;
         }
     }
 

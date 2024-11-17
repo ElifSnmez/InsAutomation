@@ -50,45 +50,52 @@ public class OpenPositionsPage {
         }
     }
 
-    public boolean isJobListPresent() throws InterruptedException {
-        WebElement firstJobCard = wait.until(ExpectedConditions.visibilityOfElementLocated(firstJob));
-        actions.moveToElement(firstJobCard).perform();
-        List<WebElement> QAJobList = driver.findElements(jobList);
-        Thread.sleep(3000);
-        if (!QAJobList.isEmpty()) {
-            System.out.println("Job list is present with " + QAJobList.size() + " jobs.");
-            return true;
-        } else {
-            System.out.println("Job list is empty.");
+    public boolean isJobListPresent() {
+        try {
+            WebElement firstJobCard = wait.until(ExpectedConditions.visibilityOfElementLocated(firstJob));
+            actions.moveToElement(firstJobCard).perform();
+            List<WebElement> QAJobList = driver.findElements(jobList);
+            Thread.sleep(3000);
+
+            return !QAJobList.isEmpty();
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public void checkJobCardDetails() throws InterruptedException {
-        for (WebElement job : driver.findElements(firstJob)) {
-            String title = job.findElement(jobCardPositionTitleLocator).getText();
-            String department = job.findElement(jobCardDepartmentLocator).getText();
-            String location = job.findElement(jobCardLocationLocator).getText();
 
-            System.out.println("Position: " + title + " | Department: " + department + " | Location: " + location);
+    public boolean checkJobCardDetails() {
+        try {
+            List<WebElement> jobCards = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(firstJob));
+            for (WebElement job : jobCards) {
+                String title = job.findElement(jobCardPositionTitleLocator).getText();
+                String department = job.findElement(jobCardDepartmentLocator).getText();
+                String location = job.findElement(jobCardLocationLocator).getText();
 
-            if (!title.toLowerCase().contains("quality assurance") || !department.equals("Quality Assurance") || !location.equals("Istanbul, Turkey")) {
-                System.out.println("Error: Job details do not match expected values!");
+                if (!title.toLowerCase().contains("quality assurance") ||
+                        !department.equals("Quality Assurance") ||
+                        !location.equals("Istanbul, Turkey")) {
+                    return false;
+                }
             }
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
-    public void clickJobCard() throws InterruptedException {
+    public void clickViewJobCard() {
         WebElement jobCard = wait.until(ExpectedConditions.visibilityOfElementLocated(firstJob));
         actions.moveToElement(jobCard).perform();
         WebElement viewRole = wait.until(ExpectedConditions.elementToBeClickable(viewRoleButton));
         viewRole.click();
     }
-
-
-
-
-
 }
+
+
+
+
+
+
 
 
